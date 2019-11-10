@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { toast } from 'react-toastify';
+import { ThemeProvider } from '@material-ui/styles';
 import './App.scss';
+import * as weatherActionCreators from './store/Weather/Weather.actions';
 import Weather from './pages/Weather/Weather';
 import Loading from './components/Loading';
-import { ThemeProvider } from '@material-ui/styles';
 import { createMyTheme } from './model/theme.model';
+import { AppState } from './store/rootReducer';
+import { WeatherInfo } from './store/Weather/Weather.model';
+
+// TODO: customize toast
+toast.configure();
 
 const theme = createMyTheme({
  custom: {
@@ -14,17 +23,20 @@ const theme = createMyTheme({
 });
 
 const App: React.FC = () => {
-  const [ loading, setLoading ] = useState(false);
+  const [ loading, setLoading ] = useState(true);
+  // TODO: fix weatherInfo typings
+  const weatherSegments = useSelector<AppState, WeatherInfo[]>(state => state.weatherInfo.weatherSegments);
+  const dispatch = useDispatch();
+  const actions = bindActionCreators({
+    ...weatherActionCreators
+  }, dispatch);
+  console.log(weatherSegments);
 
   useEffect(() => {
     setLoading(true);
-    fetch('http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40')
-      .then((response) => response.json())
-      .then((weatherData) => {
-        console.log(weatherData);
-        setLoading(false);
-      })
-  }, []);
+    // TODO: fix this strange case
+    console.log((actions.getWeatherInfoThunk() as any).then(() => setLoading(false)));
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>

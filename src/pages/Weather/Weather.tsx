@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Radio from '@material-ui/core/Radio';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-import { Scale } from '../../model/weather.model';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/styles';
+import cn from 'classnames';
+import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
 import Box from '@material-ui/core/Box';
-import cn from 'classnames';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
