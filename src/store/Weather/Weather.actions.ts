@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 import * as api from './Weather.api';
-import { WeatherActionTypes, WeatherInfo, Scale, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE } from './Weather.model';
+import { WeatherActionTypes, Scale, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE, WeatherSegment } from './Weather.model';
 
-export const getWeatherInfo = (weatherInfo: WeatherInfo[]): WeatherActionTypes => ({
+export const getWeatherInfo = (weatherInfo: WeatherSegment[]): WeatherActionTypes => ({
   type: GET_WEATHER_INFO,
   weatherInfo
 });
@@ -15,6 +15,6 @@ export const changeTemperatureScale = (scale: Scale): WeatherActionTypes => ({
 export const getWeatherInfoThunk = () =>
   async (dispatch: Dispatch) => {
     const response = await api.getWeatherInfo();
-    dispatch(getWeatherInfo(response));
+    dispatch(getWeatherInfo(response.list));
   }
 

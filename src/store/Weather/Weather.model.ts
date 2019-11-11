@@ -3,7 +3,7 @@ export enum Scale {
   Celsius = 'Celsius'
 }
 
-export type WeatherInfo = {
+export type WeatherSegment = {
   dt: number;
   main: {
     temp: number;
@@ -31,7 +31,15 @@ export type WeatherInfo = {
   sys: {
     pod: string;
   },
-  dt_txt: string;
+  dt_txt: string
+};
+
+export type WeatherInfo = {
+  cod: string;
+  message: number;
+  city: {};
+  cnt: number;
+  list: Array<WeatherSegment>
 }
 
 
@@ -41,7 +49,7 @@ export const CHANGE_TEMPERATURE_SCALE = 'CHANGE_TEMPERATURE_SCALE';
 
 interface GetWeatherAction {
   type: typeof GET_WEATHER_INFO,
-  weatherInfo: WeatherInfo[]
+  weatherInfo: WeatherSegment[]
 }
 
 interface ChangeTemperatureScaleAction {

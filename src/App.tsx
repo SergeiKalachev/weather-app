@@ -9,7 +9,7 @@ import Weather from './pages/Weather/Weather';
 import Loading from './components/Loading';
 import { createMyTheme } from './model/theme.model';
 import { AppState } from './store/rootReducer';
-import { WeatherInfo } from './store/Weather/Weather.model';
+import { WeatherSegment } from './store/Weather/Weather.model';
 
 // TODO: customize toast
 toast.configure();
@@ -24,19 +24,20 @@ const theme = createMyTheme({
 
 const App: React.FC = () => {
   const [ loading, setLoading ] = useState(true);
-  // TODO: fix weatherInfo typings
-  const weatherSegments = useSelector<AppState, WeatherInfo[]>(state => state.weatherInfo.weatherSegments);
+  const weatherSegments = useSelector<AppState, WeatherSegment[]>(state => state.weatherInfo.weatherSegments);
   const dispatch = useDispatch();
-  const actions = bindActionCreators({
-    ...weatherActionCreators
-  }, dispatch);
   console.log(weatherSegments);
 
   useEffect(() => {
+    const actions = bindActionCreators({
+      ...weatherActionCreators
+    }, dispatch);
+  
     setLoading(true);
+
     actions.getWeatherInfoThunk()
     .then(() => setLoading(false));
-  }, [])
+  }, [dispatch])
 
   return (
     <ThemeProvider theme={theme}>

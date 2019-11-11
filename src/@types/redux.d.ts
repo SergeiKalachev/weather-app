@@ -1,3 +1,5 @@
+import { ThunkAction } from 'redux-thunk';
+
 declare module 'redux' {
   /**
    * Overload for bindActionCreators redux function, returns expects responses

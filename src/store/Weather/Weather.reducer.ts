@@ -1,8 +1,8 @@
-import { Scale, WeatherActionTypes, WeatherInfo, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE } from './Weather.model';
+import { Scale, WeatherActionTypes, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE, WeatherSegment } from './Weather.model';
 
 export type WeatherState = {
   scale: Scale;
-  weatherSegments: WeatherInfo[];
+  weatherSegments: WeatherSegment[];
 }
 
 const initialState: WeatherState = {
