@@ -34,8 +34,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    // TODO: fix this strange case
-    console.log((actions.getWeatherInfoThunk() as any).then(() => setLoading(false)));
+    actions.getWeatherInfoThunk()
+    .then(() => setLoading(false));
   }, [])
 
   return (
