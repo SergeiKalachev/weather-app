@@ -3,7 +3,7 @@ import { Scale, WeatherActionTypes, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE, 
 export type WeatherState = {
   scale: Scale;
   weatherSegments: WeatherSegment[];
-}
+};
 
 const initialState: WeatherState = {
   scale: Scale.Fahrenheit,

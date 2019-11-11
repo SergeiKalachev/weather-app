@@ -10,11 +10,10 @@ export const getWeatherInfo = (weatherInfo: WeatherSegment[]): WeatherActionType
 export const changeTemperatureScale = (scale: Scale): WeatherActionTypes => ({
   type: CHANGE_TEMPERATURE_SCALE,
   scale
-})
+});
 
 export const getWeatherInfoThunk = () =>
   async (dispatch: Dispatch) => {
     const response = await api.getWeatherInfo();
     dispatch(getWeatherInfo(response.list));
-  }
-
+  };

@@ -3,6 +3,6 @@ import { weatherInfoReducer } from './Weather/Weather.reducer';
 
 export const rootReducer = combineReducers({
   weatherInfo: weatherInfoReducer
-})
+});
 
-export type AppState = ReturnType<typeof rootReducer>
+export type AppState = ReturnType<typeof rootReducer>;

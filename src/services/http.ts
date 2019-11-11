@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -10,9 +10,9 @@ export enum HttpMethod {
 type Options = {
   url: string;
   method: HttpMethod;
-}
+};
 
 export const send = <T>({ url, method }: Options): Promise<T> =>
   fetch(url, { method })
-    .then(response => response.json())
-    .catch(_e => toast.error(`Http request to ${url} failed`));
+    .then((response) => response.json())
+    .catch((_e) => toast.error(`Http request to ${url} failed`));

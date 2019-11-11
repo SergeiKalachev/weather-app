@@ -25,10 +25,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
   },
   arrow: {
     color: theme.palette.primary.main,
-    cursor:'pointer',
+    cursor: 'pointer',
     fontSize: '90px',
     '&:hover': {
-      color: theme.palette.secondary.main,
+      color: theme.palette.secondary.main
     }
   },
   arrowLeft: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
 }));
 
 const Weather: React.FC = () => {
-  const [scale, setScale] = useState<Scale>(Scale.Fahrenheit);
+  const [ scale, setScale ] = useState<Scale>(Scale.Fahrenheit);
   const classes = useStyles();
 
   return (
@@ -74,6 +74,6 @@ const Weather: React.FC = () => {
       </Card>
     </>
   );
-}
+};
 
 export default Weather;

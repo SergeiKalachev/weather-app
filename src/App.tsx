@@ -15,29 +15,30 @@ import { WeatherSegment } from './store/Weather/Weather.model';
 toast.configure();
 
 const theme = createMyTheme({
- custom: {
-  bgGray: 'rgb(192, 192, 192)',
-  boxShadowDark: 'rgb(58, 58, 58)',
-  boxShadow1: '0 0 5px rgb(58, 58, 58)'
- }
+  custom: {
+    bgGray: 'rgb(192, 192, 192)',
+    boxShadowDark: 'rgb(58, 58, 58)',
+    boxShadow1: '0 0 5px rgb(58, 58, 58)'
+  }
 });
 
 const App: React.FC = () => {
   const [ loading, setLoading ] = useState(true);
-  const weatherSegments = useSelector<AppState, WeatherSegment[]>(state => state.weatherInfo.weatherSegments);
+  const weatherSegments = useSelector<AppState, WeatherSegment[]>((state) => state.weatherInfo.weatherSegments);
   const dispatch = useDispatch();
+  // tslint:disable-next-line: no-console
   console.log(weatherSegments);
 
   useEffect(() => {
     const actions = bindActionCreators({
       ...weatherActionCreators
     }, dispatch);
-  
+
     setLoading(true);
 
     actions.getWeatherInfoThunk()
     .then(() => setLoading(false));
-  }, [dispatch])
+  }, [ dispatch ]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,6 +47,6 @@ const App: React.FC = () => {
       </div>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
