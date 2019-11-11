@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Radio from '@material-ui/core/Radio';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import Card from '@material-ui/core/Card';
@@ -7,6 +8,7 @@ import cn from 'classnames';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
 import Box from '@material-ui/core/Box';
+import { getGroupedSegments } from './Weather.selectors';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
@@ -43,6 +45,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
 }));
 
 const Weather: React.FC = () => {
+  const weatherSegments = useSelector(getGroupedSegments);
+  // tslint:disable-next-line: no-console
+  console.log(weatherSegments);
+
   const [ scale, setScale ] = useState<Scale>(Scale.Fahrenheit);
   const classes = useStyles();
 
