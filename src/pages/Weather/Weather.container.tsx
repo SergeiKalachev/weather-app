@@ -89,7 +89,7 @@ const Weather: React.FC = () => {
           <Box>
             {isLeftArrowVisible && (
               <ArrowRightAltIcon
-                onClick={() => actions.changePageIndex(pageIndex - 1)}
+                onClick={() => actions.changePageIndex(pageIndex - pageSize)}
                 className={cn(classes.arrow, classes.arrowLeft)}
               />
             )}
@@ -97,7 +97,7 @@ const Weather: React.FC = () => {
           <Box>
             {isRightArrowVisible && (
               <ArrowRightAltIcon
-                onClick={() => actions.changePageIndex(pageIndex + 1)}
+                onClick={() => actions.changePageIndex(pageIndex + pageSize)}
                 className={classes.arrow}
               />
             )}
