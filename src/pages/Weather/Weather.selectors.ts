@@ -26,6 +26,7 @@ const countAverageTemperature = (groupedSegments: ReturnType<typeof groupSegment
     forecasts.push({
       date: moment(new Date(date)).format('DD MMM YY'),
       averageTemperature: converterFromKelvin[scale](temperature)
+      // TODO: add weather info like sunny in 3p.m, scattered clouds in 6 p.m
     });
   }
 
