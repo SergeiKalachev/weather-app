@@ -17,7 +17,7 @@ const countAverageTemperature = (groupedSegments: ReturnType<typeof groupSegment
   const forecasts = [];
   for (const [ date, weatherInfo ] of groupedSegments.entries()) {
     forecasts.push({
-      date,
+      date: moment(new Date(date)).format('DD MMM YY'),
       averageTemperature: weatherInfo.reduce((acc, curr) => acc + curr.main.temp, 0) / weatherInfo.length
     });
   }

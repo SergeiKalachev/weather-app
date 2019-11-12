@@ -11,6 +11,7 @@ import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
 import { getForecasts, getPageIndex, getPageSize } from './Weather.selectors';
+import { WeatherForecast } from './Weather.components';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
@@ -22,10 +23,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     justifyContent: 'center'
   },
   containerCard: {
-    marginTop: '10px',
-    margin: 'auto',
-    minWidth: '450px',
-    maxWidth: '550px'
+    margin: '10px auto',
+    paddingBottom: '10px',
+    minWidth: '500px',
+    maxWidth: '600px'
   },
   arrow: {
     color: theme.palette.primary.main,
@@ -43,6 +44,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     margin: 'auto',
     display: 'flex',
     justifyContent: 'space-between'
+  },
+  forecastContainer: {
+    display: 'flex',
+    justifyContent: 'space-around'
   }
 }));
 
@@ -55,9 +60,8 @@ const Weather: React.FC = () => {
   const isLeftArrowVisible = pageIndex !== 0;
   const isRightArrowVisible = pageIndex + pageSize < forecasts.length;
   const actions = bindActionCreators(weatherActionCreators, dispatch);
-  // tslint:disable-next-line: no-console
-  console.log(forecastsPage);
 
+  // TODO: place it it reducer
   const [ scale, setScale ] = useState<Scale>(Scale.Fahrenheit);
   const classes = useStyles();
 
@@ -99,6 +103,15 @@ const Weather: React.FC = () => {
               />
             )}
           </Box>
+        </Box>
+        <Box className={classes.forecastContainer}>
+          {forecastsPage.map(({ date, averageTemperature }) => (
+            <WeatherForecast
+              key={date}
+              date={date}
+              averageTemperature={averageTemperature}
+            />
+          ))}
         </Box>
       </Card>
     </>
