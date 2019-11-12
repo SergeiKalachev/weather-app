@@ -10,7 +10,7 @@ import cn from 'classnames';
 import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
-import { getForecasts, getPageIndex, getPageSize } from './Weather.selectors';
+import { getForecasts, getPageIndex, getPageSize, getScale } from './Weather.selectors';
 import { WeatherForecast } from './Weather.components';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
@@ -52,6 +52,7 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
 }));
 
 const Weather: React.FC = () => {
+  const scale = useSelector(getScale);
   const forecasts = useSelector(getForecasts);
   const pageIndex = useSelector(getPageIndex);
   const pageSize = useSelector(getPageSize);
@@ -61,8 +62,6 @@ const Weather: React.FC = () => {
   const isRightArrowVisible = pageIndex + pageSize < forecasts.length;
   const actions = bindActionCreators(weatherActionCreators, dispatch);
 
-  // TODO: place it it reducer
-  const [ scale, setScale ] = useState<Scale>(Scale.Fahrenheit);
   const classes = useStyles();
 
   return (
@@ -72,13 +71,13 @@ const Weather: React.FC = () => {
           <span>{Scale.Celsius}</span>
           <Radio
             checked={scale === Scale.Celsius}
-            onChange={(e) => setScale(e.target.value as Scale)}
+            onChange={(e) => actions.changeTemperatureScale(e.target.value as Scale)}
             color="primary"
             value={Scale.Celsius}
           />
           <Radio
             checked={scale === Scale.Fahrenheit}
-            onChange={(e) => setScale(e.target.value as Scale)}
+            onChange={(e) => actions.changeTemperatureScale(e.target.value as Scale)}
             color="secondary"
             value={Scale.Fahrenheit}
           />
@@ -108,6 +107,7 @@ const Weather: React.FC = () => {
           {forecastsPage.map(({ date, averageTemperature }) => (
             <WeatherForecast
               key={date}
+              scale={scale}
               date={date}
               averageTemperature={averageTemperature}
             />
