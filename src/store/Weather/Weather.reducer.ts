@@ -1,12 +1,19 @@
-import { Scale, WeatherActionTypes, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE, WeatherSegment } from './Weather.model';
+import {
+  Scale, WeatherActionTypes, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE,
+  WeatherSegment, CHANGE_PAGE_INDEX
+} from './Weather.model';
 
 export type WeatherState = {
   scale: Scale;
+  pageIndex: number;
+  pageSize: number;
   weatherSegments: WeatherSegment[];
 };
 
 const initialState: WeatherState = {
   scale: Scale.Fahrenheit,
+  pageIndex: 0,
+  pageSize: 3,
   weatherSegments: []
 };
 
@@ -21,6 +28,11 @@ export const weatherInfoReducer = (state = initialState, action: WeatherActionTy
     return {
       ...state,
       scale: action.scale
+    };
+  case CHANGE_PAGE_INDEX:
+    return {
+      ...state,
+      pageIndex: action.pageIndex
     };
   default:
     return state;

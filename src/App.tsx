@@ -25,9 +25,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const actions = bindActionCreators({
-      ...weatherActionCreators
-    }, dispatch);
+    const actions = bindActionCreators(weatherActionCreators, dispatch);
 
     setLoading(true);
 

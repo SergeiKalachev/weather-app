@@ -13,4 +13,21 @@ const groupSegments = (segments: WeatherSegment[]) => {
   return groupedSegments;
 };
 
-export const getGroupedSegments = (state: AppState) => groupSegments(state.weatherInfo.weatherSegments);
+const countAverageTemperature = (groupedSegments: ReturnType<typeof groupSegments>) => {
+  const forecasts = [];
+  for (const [ date, weatherInfo ] of groupedSegments.entries()) {
+    forecasts.push({
+      date,
+      averageTemperature: weatherInfo.reduce((acc, curr) => acc + curr.main.temp, 0) / weatherInfo.length
+    });
+  }
+
+  return forecasts;
+};
+
+export const getPageIndex = ((state: AppState) => state.weatherInfo.pageIndex);
+
+export const getPageSize = ((state: AppState) => state.weatherInfo.pageSize);
+
+export const getForecasts = (state: AppState) =>
+  countAverageTemperature(groupSegments(state.weatherInfo.weatherSegments));

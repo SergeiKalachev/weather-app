@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Radio from '@material-ui/core/Radio';
+import Box from '@material-ui/core/Box';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/styles';
 import cn from 'classnames';
+import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
-import Box from '@material-ui/core/Box';
-import { getGroupedSegments } from './Weather.selectors';
+import { getForecasts, getPageIndex, getPageSize } from './Weather.selectors';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
@@ -45,9 +47,16 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
 }));
 
 const Weather: React.FC = () => {
-  const weatherSegments = useSelector(getGroupedSegments);
+  const forecasts = useSelector(getForecasts);
+  const pageIndex = useSelector(getPageIndex);
+  const pageSize = useSelector(getPageSize);
+  const dispatch = useDispatch();
+  const forecastsPage = forecasts.slice(pageIndex, pageIndex + pageSize);
+  const isLeftArrowVisible = pageIndex !== 0;
+  const isRightArrowVisible = pageIndex + pageSize < forecasts.length;
+  const actions = bindActionCreators(weatherActionCreators, dispatch);
   // tslint:disable-next-line: no-console
-  console.log(weatherSegments);
+  console.log(forecastsPage);
 
   const [ scale, setScale ] = useState<Scale>(Scale.Fahrenheit);
   const classes = useStyles();
@@ -74,8 +83,22 @@ const Weather: React.FC = () => {
       </Box>
       <Card className={cn(classes.card, classes.containerCard)}>
         <Box className={classes.pagingArrows}>
-          <ArrowRightAltIcon className={cn(classes.arrow, classes.arrowLeft)} />
-          <ArrowRightAltIcon className={classes.arrow} />
+          <Box>
+            {isLeftArrowVisible && (
+              <ArrowRightAltIcon
+                onClick={() => actions.changePageIndex(pageIndex - 1)}
+                className={cn(classes.arrow, classes.arrowLeft)}
+              />
+            )}
+          </Box>
+          <Box>
+            {isRightArrowVisible && (
+              <ArrowRightAltIcon
+                onClick={() => actions.changePageIndex(pageIndex + 1)}
+                className={classes.arrow}
+              />
+            )}
+          </Box>
         </Box>
       </Card>
     </>

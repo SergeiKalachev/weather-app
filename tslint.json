@@ -300,6 +300,7 @@
         "member-ordering": false,
         "member-access": false,
         "jsx-alignment": true,
-        "jsx-no-lambda": false
+        "jsx-no-lambda": false,
+        "jsx-no-multiline-js": false
   }
 } 

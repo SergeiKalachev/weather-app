@@ -44,6 +44,7 @@ export type WeatherInfo = {
 
 export const GET_WEATHER_INFO = 'GET_WEATHER_INFO';
 export const CHANGE_TEMPERATURE_SCALE = 'CHANGE_TEMPERATURE_SCALE';
+export const CHANGE_PAGE_INDEX = 'CHANGE_PAGE_INDEX';
 
 interface GetWeatherAction {
   type: typeof GET_WEATHER_INFO;
@@ -55,4 +56,9 @@ interface ChangeTemperatureScaleAction {
   scale: Scale;
 }
 
-export type WeatherActionTypes = GetWeatherAction | ChangeTemperatureScaleAction;
+interface ChangePageIndex {
+  type: typeof CHANGE_PAGE_INDEX;
+  pageIndex: number;
+}
+
+export type WeatherActionTypes = GetWeatherAction | ChangeTemperatureScaleAction | ChangePageIndex;
