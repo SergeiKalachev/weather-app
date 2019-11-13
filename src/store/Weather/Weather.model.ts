@@ -42,9 +42,17 @@ export type WeatherInfo = {
   list: Array<WeatherSegment>;
 };
 
+export type Forecast = {
+  date: string;
+  [Scale.Celsius]: number;
+  [Scale.Fahrenheit]: number;
+  segments: WeatherSegment[];
+};
+
 export const GET_WEATHER_INFO = 'GET_WEATHER_INFO';
 export const CHANGE_TEMPERATURE_SCALE = 'CHANGE_TEMPERATURE_SCALE';
 export const CHANGE_PAGE_INDEX = 'CHANGE_PAGE_INDEX';
+export const CHANGE_SELECTED_FORECAST = 'CHANGE_SELECTED_FORECAST';
 
 interface GetWeatherAction {
   type: typeof GET_WEATHER_INFO;
@@ -61,4 +69,10 @@ interface ChangePageIndex {
   pageIndex: number;
 }
 
-export type WeatherActionTypes = GetWeatherAction | ChangeTemperatureScaleAction | ChangePageIndex;
+interface ChangeSelectedForecast {
+  type: typeof CHANGE_SELECTED_FORECAST;
+  selectedForecast: Forecast;
+}
+
+export type WeatherActionTypes = GetWeatherAction | ChangeTemperatureScaleAction
+  | ChangePageIndex | ChangeSelectedForecast;

@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import * as api from './Weather.api';
 import {
   WeatherActionTypes, Scale, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE,
-  WeatherSegment, CHANGE_PAGE_INDEX
+  WeatherSegment, CHANGE_PAGE_INDEX, Forecast, CHANGE_SELECTED_FORECAST
 } from './Weather.model';
 
 export const getWeatherInfo = (weatherInfo: WeatherSegment[]): WeatherActionTypes => ({
@@ -18,6 +18,11 @@ export const changeTemperatureScale = (scale: Scale): WeatherActionTypes => ({
 export const changePageIndex = (pageIndex: number): WeatherActionTypes => ({
   type: CHANGE_PAGE_INDEX,
   pageIndex
+});
+
+export const changeSelectedForecast = (selectedForecast: Forecast) => ({
+  type: CHANGE_SELECTED_FORECAST,
+  selectedForecast
 });
 
 export const getWeatherInfoThunk = () =>

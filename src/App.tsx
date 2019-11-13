@@ -16,7 +16,8 @@ const theme = createMyTheme({
   custom: {
     bgGray: 'rgb(192, 192, 192)',
     boxShadowDark: 'rgb(58, 58, 58)',
-    boxShadow1: '0 0 5px rgb(58, 58, 58)'
+    boxShadow1: '0 0 5px rgb(58, 58, 58)',
+    lightAqua: '#d9ffff'
   }
 });
 

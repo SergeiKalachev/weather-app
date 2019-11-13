@@ -1,6 +1,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Radio from '@material-ui/core/Radio';
 import Box from '@material-ui/core/Box';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
@@ -10,7 +10,7 @@ import cn from 'classnames';
 import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
-import { getForecasts, getPageIndex, getPageSize, getScale } from './Weather.selectors';
+import { getPageIndex, getPageSize, getScale, getForecasts, getSelectedForecast } from './Weather.selectors';
 import { WeatherForecast } from './Weather.components';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
@@ -53,7 +53,8 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
 
 const Weather: React.FC = () => {
   const scale = useSelector(getScale);
-  const forecasts = useSelector(getForecasts);
+  const forecasts = useSelector(getForecasts, shallowEqual);
+  const selectedForecast = useSelector(getSelectedForecast, shallowEqual);
   const pageIndex = useSelector(getPageIndex);
   const pageSize = useSelector(getPageSize);
   const dispatch = useDispatch();
@@ -104,12 +105,14 @@ const Weather: React.FC = () => {
           </Box>
         </Box>
         <Box className={classes.forecastContainer}>
-          {forecastsPage.map(({ date, averageTemperature }) => (
+          {forecastsPage.map((forecastPage) => (
             <WeatherForecast
-              key={date}
+              selected={!!selectedForecast && selectedForecast.date === forecastPage.date}
+              key={forecastPage.date}
               scale={scale}
-              date={date}
-              averageTemperature={averageTemperature}
+              date={forecastPage.date}
+              averageTemperature={forecastPage[scale]}
+              onClick={() => actions.changeSelectedForecast(forecastPage)}
             />
           ))}
         </Box>
