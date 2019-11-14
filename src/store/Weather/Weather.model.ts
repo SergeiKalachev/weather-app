@@ -53,6 +53,7 @@ export const GET_WEATHER_INFO = 'GET_WEATHER_INFO';
 export const CHANGE_TEMPERATURE_SCALE = 'CHANGE_TEMPERATURE_SCALE';
 export const CHANGE_PAGE_INDEX = 'CHANGE_PAGE_INDEX';
 export const CHANGE_SELECTED_FORECAST = 'CHANGE_SELECTED_FORECAST';
+export const SET_ERROR = 'SET_ERROR';
 
 interface GetWeatherAction {
   type: typeof GET_WEATHER_INFO;
@@ -74,5 +75,10 @@ interface ChangeSelectedForecast {
   selectedForecast: Forecast;
 }
 
+interface SetError {
+  type: typeof SET_ERROR;
+  error: string;
+}
+
 export type WeatherActionTypes = GetWeatherAction | ChangeTemperatureScaleAction
-  | ChangePageIndex | ChangeSelectedForecast;
+  | ChangePageIndex | ChangeSelectedForecast | SetError;

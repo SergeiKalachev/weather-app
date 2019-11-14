@@ -1,11 +1,13 @@
+// tslint:disable: no-magic-numbers
 import React, { FC } from 'react';
 import cn from 'classnames';
 import Box from '@material-ui/core/Box';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { MyTheme } from '../../model/theme.model';
 import { Scale } from '../../store/Weather/Weather.model';
+import { converterFromKelvin } from '../../store/Weather/Weather.reducer';
 
-type Props = {
+type WeatherForecastProps = {
   date: string;
   selected: boolean;
   averageTemperature: number;
@@ -34,6 +36,26 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
   forecast__text: {
     fontWeight: 600,
     marginRight: '2px'
+  },
+  barchart: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginRight: '5px',
+    '&:last-child': {
+      marginRight: 0
+    }
+  },
+  'barchart__level-container': {
+    display: 'flex',
+    alignItems: 'flex-end',
+    backgroundColor: 'red',
+    width: '45px',
+    height: '100%'
+  },
+  barchart__level: {
+    width: '100%',
+    backgroundColor: 'green'
   }
 }));
 
@@ -42,7 +64,7 @@ const temperatureLetter = {
   [Scale.Fahrenheit]: 'F'
 };
 
-export const WeatherForecast: FC<Props> = ({ date, averageTemperature, scale, selected, onClick }) => {
+export const WeatherForecast: FC<WeatherForecastProps> = ({ date, averageTemperature, scale, selected, onClick }) => {
   const classes = useStyles();
 
   return (
@@ -59,6 +81,32 @@ export const WeatherForecast: FC<Props> = ({ date, averageTemperature, scale, se
         </Box>
         {averageTemperature.toFixed(2)} {temperatureLetter[scale]}
       </Box>
+    </Box>
+  );
+};
+
+type SegmentBarChartProps = {
+  temperature: number;
+  maxTemperature: number;
+  date: string;
+  scale: Scale;
+};
+
+export const SegmentBarChart: FC<SegmentBarChartProps> = ({ temperature, scale, maxTemperature }) => {
+  const classes = useStyles();
+  const converter = converterFromKelvin[scale];
+
+  return (
+    <Box className={classes.barchart}>
+      <Box className={classes['barchart__level-container']}>
+        <Box
+          className={classes.barchart__level}
+          style={{
+            height: `${100 * temperature / maxTemperature}%`
+          }}
+        />
+      </Box>
+      {`${converter(temperature).toFixed()} ${temperatureLetter[scale]}`}
     </Box>
   );
 };

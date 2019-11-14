@@ -10,13 +10,19 @@ import cn from 'classnames';
 import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
 import { MyTheme } from '../../model/theme.model';
-import { getPageIndex, getPageSize, getScale, getForecasts, getSelectedForecast } from './Weather.selectors';
-import { WeatherForecast } from './Weather.components';
+import {
+  getPageIndex, getPageSize, getScale, getForecasts,
+  getSelectedForecast, getError, getSegmentsMaxTemperature
+} from './Weather.selectors';
+import { WeatherForecast, SegmentBarChart } from './Weather.components';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
     padding: '0 10px',
     boxShadow: theme.custom.boxShadow1
+  },
+  error: {
+    padding: '10px'
   },
   temperatureScale: {
     display: 'flex',
@@ -48,13 +54,23 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
   forecastContainer: {
     display: 'flex',
     justifyContent: 'space-around'
+  },
+  barChartsContainer: {
+    margin: 'auto',
+    width: '400px',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    height: '100px',
+    marginTop: '20px'
   }
 }));
 
 const Weather: React.FC = () => {
+  const error = useSelector(getError);
   const scale = useSelector(getScale);
   const forecasts = useSelector(getForecasts, shallowEqual);
   const selectedForecast = useSelector(getSelectedForecast, shallowEqual);
+  const maxSegmentsTemperature = useSelector(getSegmentsMaxTemperature);
   const pageIndex = useSelector(getPageIndex);
   const pageSize = useSelector(getPageSize);
   const dispatch = useDispatch();
@@ -64,6 +80,12 @@ const Weather: React.FC = () => {
   const actions = bindActionCreators(weatherActionCreators, dispatch);
 
   const classes = useStyles();
+
+  if (error) {
+    return (
+      <Card className={cn(classes.card, classes.error)}>Error calling the weather api: {error}</Card>
+    );
+  }
 
   return (
     <>
@@ -113,6 +135,17 @@ const Weather: React.FC = () => {
               date={forecastPage.date}
               averageTemperature={forecastPage[scale]}
               onClick={() => actions.changeSelectedForecast(forecastPage)}
+            />
+          ))}
+        </Box>
+        <Box className={classes.barChartsContainer}>
+          {selectedForecast && selectedForecast.segments.map((segment) => (
+            <SegmentBarChart
+              key={segment.dt}
+              scale={scale}
+              temperature={segment.main.temp}
+              maxTemperature={maxSegmentsTemperature as number}
+              date={segment.dt_txt}
             />
           ))}
         </Box>

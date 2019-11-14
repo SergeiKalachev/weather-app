@@ -2,7 +2,7 @@
 import moment from 'moment';
 import {
   Scale, WeatherActionTypes, GET_WEATHER_INFO, CHANGE_TEMPERATURE_SCALE,
-  WeatherSegment, CHANGE_PAGE_INDEX, Forecast, CHANGE_SELECTED_FORECAST
+  WeatherSegment, CHANGE_PAGE_INDEX, Forecast, CHANGE_SELECTED_FORECAST, SET_ERROR
 } from './Weather.model';
 
 export type WeatherState = {
@@ -11,6 +11,8 @@ export type WeatherState = {
   pageSize: number;
   forecasts: Forecast[];
   selectedForecast: Forecast | null;
+  segmentsMaxTemperature: number | null;
+  error: string | null;
 };
 
 const initialState: WeatherState = {
@@ -18,10 +20,12 @@ const initialState: WeatherState = {
   pageIndex: 0,
   pageSize: 3,
   forecasts: [],
-  selectedForecast: null
+  selectedForecast: null,
+  segmentsMaxTemperature: null,
+  error: null
 };
 
-const converterFromKelvin = {
+export const converterFromKelvin = {
   [Scale.Celsius]: (temperature: number) => temperature - 273.15,
   [Scale.Fahrenheit]: (temperature: number) => (temperature - 273.15) * 1.8 + 32
 };
@@ -53,15 +57,24 @@ const constructForecasts = (groupedSegments: ReturnType<typeof groupSegments>, s
   return forecasts;
 };
 
+const getSegmentsMaxTemperature = (forecast: Forecast) => {
+  const segmentsTemperatures = forecast.segments.map((s) => s.main.temp);
+  const segmentsMaxTemperature = segmentsTemperatures.sort((a, b) => b - a)[0];
+
+  return segmentsMaxTemperature;
+};
+
 export const weatherInfoReducer = (state = initialState, action: WeatherActionTypes): WeatherState => {
   switch (action.type) {
   case GET_WEATHER_INFO:
     const forecasts = constructForecasts(groupSegments(action.weatherInfo), state.scale);
+    const selectedForecast = forecasts[0];
 
     return {
       ...state,
       forecasts,
-      selectedForecast: forecasts[0]
+      selectedForecast,
+      segmentsMaxTemperature: getSegmentsMaxTemperature(selectedForecast)
     };
   case CHANGE_TEMPERATURE_SCALE:
     return {
@@ -77,7 +90,13 @@ export const weatherInfoReducer = (state = initialState, action: WeatherActionTy
   case CHANGE_SELECTED_FORECAST:
     return {
       ...state,
-      selectedForecast: action.selectedForecast
+      selectedForecast: action.selectedForecast,
+      segmentsMaxTemperature: getSegmentsMaxTemperature(action.selectedForecast)
+    };
+  case SET_ERROR:
+    return {
+      ...state,
+      error: action.error
     };
   default:
     return state;
