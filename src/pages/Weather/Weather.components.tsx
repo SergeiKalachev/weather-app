@@ -6,6 +6,7 @@ import makeStyles from '@material-ui/styles/makeStyles';
 import { MyTheme } from '../../model/theme.model';
 import { Scale } from '../../store/Weather/Weather.model';
 import { converterFromKelvin } from '../../store/Weather/Weather.reducer';
+import { theme } from '../../App';
 
 type WeatherForecastProps = {
   date: string;
@@ -49,13 +50,11 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
   'barchart__level-container': {
     display: 'flex',
     alignItems: 'flex-end',
-    backgroundColor: 'red',
     width: '45px',
     height: '100%'
   },
   barchart__level: {
-    width: '100%',
-    backgroundColor: 'green'
+    width: '100%'
   }
 }));
 
@@ -95,6 +94,8 @@ type SegmentBarChartProps = {
 export const SegmentBarChart: FC<SegmentBarChartProps> = ({ temperature, scale, maxTemperature }) => {
   const classes = useStyles();
   const converter = converterFromKelvin[scale];
+  const converterToFahrenheit = converterFromKelvin[Scale.Fahrenheit];
+  const converterToCelsius = converterFromKelvin[Scale.Celsius];
 
   return (
     <Box className={classes.barchart}>
@@ -102,7 +103,8 @@ export const SegmentBarChart: FC<SegmentBarChartProps> = ({ temperature, scale, 
         <Box
           className={classes.barchart__level}
           style={{
-            height: `${100 * temperature / maxTemperature}%`
+            height: `${100 * converterToFahrenheit(temperature) / converterToFahrenheit(maxTemperature)}%`,
+            backgroundColor: Math.sign(converterToCelsius(temperature)) === 1 ? theme.custom.orange : theme.custom.blue
           }}
         />
       </Box>

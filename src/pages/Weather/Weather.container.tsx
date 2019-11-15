@@ -61,7 +61,7 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     height: '100px',
-    marginTop: '20px'
+    marginTop: '30px'
   }
 }));
 

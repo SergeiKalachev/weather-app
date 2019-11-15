@@ -11,7 +11,6 @@ export type WeatherState = {
   pageSize: number;
   forecasts: Forecast[];
   selectedForecast: Forecast | null;
-  segmentsMaxTemperature: number | null;
   error: string | null;
 };
 
@@ -21,7 +20,6 @@ const initialState: WeatherState = {
   pageSize: 3,
   forecasts: [],
   selectedForecast: null,
-  segmentsMaxTemperature: null,
   error: null
 };
 
@@ -57,13 +55,6 @@ const constructForecasts = (groupedSegments: ReturnType<typeof groupSegments>, s
   return forecasts;
 };
 
-const getSegmentsMaxTemperature = (forecast: Forecast) => {
-  const segmentsTemperatures = forecast.segments.map((s) => s.main.temp);
-  const segmentsMaxTemperature = segmentsTemperatures.sort((a, b) => b - a)[0];
-
-  return segmentsMaxTemperature;
-};
-
 export const weatherInfoReducer = (state = initialState, action: WeatherActionTypes): WeatherState => {
   switch (action.type) {
   case GET_WEATHER_INFO:
@@ -73,8 +64,7 @@ export const weatherInfoReducer = (state = initialState, action: WeatherActionTy
     return {
       ...state,
       forecasts,
-      selectedForecast,
-      segmentsMaxTemperature: getSegmentsMaxTemperature(selectedForecast)
+      selectedForecast
     };
   case CHANGE_TEMPERATURE_SCALE:
     return {
@@ -90,8 +80,7 @@ export const weatherInfoReducer = (state = initialState, action: WeatherActionTy
   case CHANGE_SELECTED_FORECAST:
     return {
       ...state,
-      selectedForecast: action.selectedForecast,
-      segmentsMaxTemperature: getSegmentsMaxTemperature(action.selectedForecast)
+      selectedForecast: action.selectedForecast
     };
   case SET_ERROR:
     return {

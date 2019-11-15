@@ -12,12 +12,14 @@ import { createMyTheme } from './model/theme.model';
 // TODO: customize toast
 toast.configure();
 
-const theme = createMyTheme({
+export const theme = createMyTheme({
   custom: {
     bgGray: 'rgb(192, 192, 192)',
     boxShadowDark: 'rgb(58, 58, 58)',
     boxShadow1: '0 0 5px rgb(58, 58, 58)',
-    lightAqua: '#d9ffff'
+    lightAqua: '#d9ffff',
+    blue: '#008ec5',
+    orange: '#ff8100'
   }
 });
 
