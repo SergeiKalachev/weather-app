@@ -2,8 +2,6 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Box from '@material-ui/core/Box';
-import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/styles';
 import cn from 'classnames';
@@ -14,8 +12,7 @@ import {
   getPageIndex, getPageSize, getScale, getForecasts,
   getSelectedForecast, getError, getSegmentsMaxTemperature
 } from './Weather.selectors';
-import { WeatherForecast, SegmentBarChart, ScaleControls } from './Weather.components';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { WeatherForecast, SegmentBarChart, ScaleControls, PagingArrows } from './Weather.components';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: theme.custom.card,
@@ -36,22 +33,13 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
       minWidth: 'auto'
     }
   },
-  arrow: {
-    color: theme.palette.primary.main,
-    cursor: 'pointer',
-    fontSize: '90px',
-    '&:hover': {
-      color: theme.palette.secondary.main
-    },
+  forecastContainer: {
     [theme.breakpoints.down('xs')]: {
-      fontSize: '80px',
-      transform: 'rotateZ(90deg)'
-    }
-  },
-  arrowLeft: {
-    transform: 'rotateY(180deg)',
-    [theme.breakpoints.down('xs')]: {
-      transform: 'rotateZ(270deg)'
+      display: 'flex',
+      justifyContent: 'space-around',
+      flexDirection: 'row-reverse',
+      alignItems: 'center',
+      marginTop: '10px'
     }
   },
   pagingArrows: {
@@ -64,15 +52,6 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
       width: 'auto',
       margin: 0,
       flexDirection: 'column'
-    }
-  },
-  forecastContainer: {
-    [theme.breakpoints.down('xs')]: {
-      display: 'flex',
-      justifyContent: 'space-around',
-      flexDirection: 'row-reverse',
-      alignItems: 'center',
-      marginTop: '10px'
     }
   },
   forecastList: {
@@ -110,9 +89,6 @@ const Weather: React.FC = () => {
   const actions = bindActionCreators(weatherActionCreators, dispatch);
 
   const classes = useStyles();
-  const ArrowComponent = useMediaQuery<MyTheme>((theme) => theme.breakpoints.down('xs'))
-    ? ArrowForwardIosIcon
-    : ArrowRightAltIcon;
 
   if (error) {
     return (
@@ -130,24 +106,13 @@ const Weather: React.FC = () => {
       </Box>
       <Card className={cn(classes.card, classes.containerCard)}>
         <Box className={classes.forecastContainer}>
-          <Box className={classes.pagingArrows}>
-            <Box>
-              {isLeftArrowVisible && (
-                <ArrowComponent
-                  onClick={() => actions.changePageIndex(pageIndex - pageSize)}
-                  className={cn(classes.arrow, classes.arrowLeft)}
-                />
-              )}
-            </Box>
-            <Box>
-              {isRightArrowVisible && (
-                <ArrowComponent
-                  onClick={() => actions.changePageIndex(pageIndex + pageSize)}
-                  className={classes.arrow}
-                />
-              )}
-            </Box>
-          </Box>
+          <PagingArrows
+            isLeftArrowVisible={isLeftArrowVisible}
+            isRightArrowVisible={isRightArrowVisible}
+            onLeftArrowClick={() => actions.changePageIndex(pageIndex - pageSize)}
+            onRightArrowClick={() => actions.changePageIndex(pageIndex + pageSize)}
+            className={classes.pagingArrows}
+          />
           <Box className={classes.forecastList}>
             {forecastsPage.map((forecastPage) => (
               <WeatherForecast

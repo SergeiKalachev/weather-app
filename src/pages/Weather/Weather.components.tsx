@@ -3,6 +3,9 @@ import React, { FC } from 'react';
 import cn from 'classnames';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { MyTheme, theme } from '../../model/theme.model';
 import { Scale } from '../../store/Weather/Weather.model';
@@ -11,6 +14,24 @@ import Radio from '@material-ui/core/Radio';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: theme.custom.card,
+  arrow: {
+    color: theme.palette.primary.main,
+    cursor: 'pointer',
+    fontSize: '90px',
+    '&:hover': {
+      color: theme.palette.secondary.main
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '80px',
+      transform: 'rotateZ(90deg)'
+    }
+  },
+  arrowLeft: {
+    transform: 'rotateY(180deg)',
+    [theme.breakpoints.down('xs')]: {
+      transform: 'rotateZ(270deg)'
+    }
+  },
   forecast: {
     display: 'flex',
     flexDirection: 'column',
@@ -86,6 +107,48 @@ export const ScaleControls: FC<ScaleControlsProps> = ({ onChange, scale }) => {
       />
       <span>{Scale.Fahrenheit}</span>
     </Card>
+  );
+};
+
+type PagingArrowsType = {
+  isLeftArrowVisible: boolean;
+  isRightArrowVisible: boolean;
+  onLeftArrowClick(): void;
+  onRightArrowClick(): void;
+  className: string;
+};
+
+export const PagingArrows: FC<PagingArrowsType> = ({
+  isLeftArrowVisible,
+  isRightArrowVisible,
+  onLeftArrowClick,
+  onRightArrowClick,
+  className
+}) => {
+  const ArrowComponent = useMediaQuery<MyTheme>((theme) => theme.breakpoints.down('xs'))
+    ? ArrowForwardIosIcon
+    : ArrowRightAltIcon;
+  const classes = useStyles();
+
+  return (
+    <Box className={className}>
+      <Box>
+        {isLeftArrowVisible && (
+          <ArrowComponent
+            onClick={onLeftArrowClick}
+            className={cn(classes.arrow, classes.arrowLeft)}
+          />
+        )}
+      </Box>
+      <Box>
+        {isRightArrowVisible && (
+          <ArrowComponent
+            onClick={onRightArrowClick}
+            className={classes.arrow}
+          />
+        )}
+      </Box>
+    </Box>
   );
 };
 
