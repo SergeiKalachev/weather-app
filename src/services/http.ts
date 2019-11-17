@@ -22,7 +22,7 @@ const MAX_SUCCESS_CODE = 299;
 
 export const isError = (resp: any): resp is HttpError => resp.cod > MAX_SUCCESS_CODE;
 
-const DEV = true;
+const DEV = false;
 
 export const send = <T>({ url, method }: Options): Promise<T | HttpError> => DEV
   ? Promise.resolve(mockedResponse)
