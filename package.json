@@ -33,7 +33,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint:ts:src"
+      "pre-commit": "npm run lint:ts:src && set CI=true && npm test"
     }
   },
   "scripts": {

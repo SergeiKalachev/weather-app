@@ -115,7 +115,7 @@ type PagingArrowsType = {
   isRightArrowVisible: boolean;
   onLeftArrowClick(): void;
   onRightArrowClick(): void;
-  className: string;
+  className?: string;
 };
 
 export const PagingArrows: FC<PagingArrowsType> = ({
