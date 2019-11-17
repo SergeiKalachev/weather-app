@@ -4,8 +4,9 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import Radio from '@material-ui/core/Radio';
 import Box from '@material-ui/core/Box';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Card from '@material-ui/core/Card';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, useTheme } from '@material-ui/styles';
 import cn from 'classnames';
 import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
@@ -15,6 +16,7 @@ import {
   getSelectedForecast, getError, getSegmentsMaxTemperature
 } from './Weather.selectors';
 import { WeatherForecast, SegmentBarChart } from './Weather.components';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
   card: {
@@ -31,8 +33,12 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
   containerCard: {
     margin: '10px auto',
     paddingBottom: '10px',
-    minWidth: '500px',
-    maxWidth: '600px'
+    minWidth: '400px',
+    maxWidth: '600px',
+    [theme.breakpoints.down('xs')]: {
+      width: '300px',
+      minWidth: 'auto'
+    }
   },
   arrow: {
     color: theme.palette.primary.main,
@@ -40,20 +46,45 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     fontSize: '90px',
     '&:hover': {
       color: theme.palette.secondary.main
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '80px',
+      transform: 'rotateZ(90deg)'
     }
   },
   arrowLeft: {
-    transform: 'rotateY(180deg)'
+    transform: 'rotateY(180deg)',
+    [theme.breakpoints.down('xs')]: {
+      transform: 'rotateZ(270deg)'
+    }
   },
   pagingArrows: {
     width: '300px',
     margin: 'auto',
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    [theme.breakpoints.down('xs')]: {
+      right: 0,
+      width: 'auto',
+      margin: 0,
+      flexDirection: 'column'
+    }
   },
   forecastContainer: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      justifyContent: 'space-around',
+      flexDirection: 'row-reverse',
+      alignItems: 'center',
+      marginTop: '10px'
+    }
+  },
+  forecastList: {
     display: 'flex',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column'
+    }
   },
   barChartsContainer: {
     margin: 'auto',
@@ -61,7 +92,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     height: '100px',
-    marginTop: '30px'
+    marginTop: '30px',
+    [theme.breakpoints.down('xs')]: {
+      width: '300px'
+    }
   }
 }));
 
@@ -80,6 +114,9 @@ const Weather: React.FC = () => {
   const actions = bindActionCreators(weatherActionCreators, dispatch);
 
   const classes = useStyles();
+  const ArrowComponent = useMediaQuery<MyTheme>((theme) => theme.breakpoints.down('xs'))
+    ? ArrowForwardIosIcon
+    : ArrowRightAltIcon;
 
   if (error) {
     return (
@@ -108,35 +145,37 @@ const Weather: React.FC = () => {
         </Card>
       </Box>
       <Card className={cn(classes.card, classes.containerCard)}>
-        <Box className={classes.pagingArrows}>
-          <Box>
-            {isLeftArrowVisible && (
-              <ArrowRightAltIcon
-                onClick={() => actions.changePageIndex(pageIndex - pageSize)}
-                className={cn(classes.arrow, classes.arrowLeft)}
-              />
-            )}
-          </Box>
-          <Box>
-            {isRightArrowVisible && (
-              <ArrowRightAltIcon
-                onClick={() => actions.changePageIndex(pageIndex + pageSize)}
-                className={classes.arrow}
-              />
-            )}
-          </Box>
-        </Box>
         <Box className={classes.forecastContainer}>
-          {forecastsPage.map((forecastPage) => (
-            <WeatherForecast
-              selected={!!selectedForecast && selectedForecast.date === forecastPage.date}
-              key={forecastPage.date}
-              scale={scale}
-              date={forecastPage.date}
-              averageTemperature={forecastPage[scale]}
-              onClick={() => actions.changeSelectedForecast(forecastPage)}
-            />
-          ))}
+          <Box className={classes.pagingArrows}>
+            <Box>
+              {isLeftArrowVisible && (
+                <ArrowComponent
+                  onClick={() => actions.changePageIndex(pageIndex - pageSize)}
+                  className={cn(classes.arrow, classes.arrowLeft)}
+                />
+              )}
+            </Box>
+            <Box>
+              {isRightArrowVisible && (
+                <ArrowComponent
+                  onClick={() => actions.changePageIndex(pageIndex + pageSize)}
+                  className={classes.arrow}
+                />
+              )}
+            </Box>
+          </Box>
+          <Box className={classes.forecastList}>
+            {forecastsPage.map((forecastPage) => (
+              <WeatherForecast
+                selected={!!selectedForecast && selectedForecast.date === forecastPage.date}
+                key={forecastPage.date}
+                scale={scale}
+                date={forecastPage.date}
+                averageTemperature={forecastPage[scale]}
+                onClick={() => actions.changeSelectedForecast(forecastPage)}
+              />
+            ))}
+          </Box>
         </Box>
         <Box className={classes.barChartsContainer}>
           {selectedForecast && selectedForecast.segments.map((segment) => (

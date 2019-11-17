@@ -25,6 +25,12 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     cursor: 'pointer',
     '&:hover': {
       boxShadow: '0 0 1px 1px black'
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: '10px',
+      '&:last-child': {
+        marginBottom: 0
+      }
     }
   },
   forecast_selected: {
@@ -51,7 +57,10 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     display: 'flex',
     alignItems: 'flex-end',
     width: '45px',
-    height: '100%'
+    height: '100%',
+    [theme.breakpoints.down('xs')]: {
+      width: '33px'
+    }
   },
   barchart__level: {
     width: '100%'
