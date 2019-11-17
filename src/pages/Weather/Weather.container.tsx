@@ -1,12 +1,11 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import Radio from '@material-ui/core/Radio';
 import Box from '@material-ui/core/Box';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Card from '@material-ui/core/Card';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import cn from 'classnames';
 import * as weatherActionCreators from '../../store/Weather/Weather.actions';
 import { Scale } from '../../store/Weather/Weather.model';
@@ -15,14 +14,11 @@ import {
   getPageIndex, getPageSize, getScale, getForecasts,
   getSelectedForecast, getError, getSegmentsMaxTemperature
 } from './Weather.selectors';
-import { WeatherForecast, SegmentBarChart } from './Weather.components';
+import { WeatherForecast, SegmentBarChart, ScaleControls } from './Weather.components';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
-  card: {
-    padding: '0 10px',
-    boxShadow: theme.custom.boxShadow1
-  },
+  card: theme.custom.card,
   error: {
     padding: '10px'
   },
@@ -127,22 +123,10 @@ const Weather: React.FC = () => {
   return (
     <>
       <Box className={classes.temperatureScale}>
-        <Card className={classes.card}>
-          <span>{Scale.Celsius}</span>
-          <Radio
-            checked={scale === Scale.Celsius}
-            onChange={(e) => actions.changeTemperatureScale(e.target.value as Scale)}
-            color="primary"
-            value={Scale.Celsius}
-          />
-          <Radio
-            checked={scale === Scale.Fahrenheit}
-            onChange={(e) => actions.changeTemperatureScale(e.target.value as Scale)}
-            color="secondary"
-            value={Scale.Fahrenheit}
-          />
-          <span>{Scale.Fahrenheit}</span>
-        </Card>
+        <ScaleControls
+          onChange={(e) => actions.changeTemperatureScale(e.target.value as Scale)}
+          scale={scale}
+        />
       </Box>
       <Card className={cn(classes.card, classes.containerCard)}>
         <Box className={classes.forecastContainer}>

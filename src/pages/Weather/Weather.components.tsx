@@ -2,21 +2,15 @@
 import React, { FC } from 'react';
 import cn from 'classnames';
 import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { MyTheme } from '../../model/theme.model';
+import { MyTheme, theme } from '../../model/theme.model';
 import { Scale } from '../../store/Weather/Weather.model';
 import { converterFromKelvin } from '../../store/Weather/Weather.reducer';
-import { theme } from '../../App';
-
-type WeatherForecastProps = {
-  date: string;
-  selected: boolean;
-  averageTemperature: number;
-  scale: Scale;
-  onClick(): void;
-};
+import Radio from '@material-ui/core/Radio';
 
 const useStyles = makeStyles<MyTheme>((theme) => ({
+  card: theme.custom.card,
   forecast: {
     display: 'flex',
     flexDirection: 'column',
@@ -66,6 +60,42 @@ const useStyles = makeStyles<MyTheme>((theme) => ({
     width: '100%'
   }
 }));
+
+type ScaleControlsProps = {
+  scale: Scale;
+  onChange(event: React.ChangeEvent<HTMLInputElement>): void;
+};
+
+export const ScaleControls: FC<ScaleControlsProps> = ({ onChange, scale }) => {
+  const classes = useStyles();
+
+  return (
+    <Card className={classes.card}>
+      <span>{Scale.Celsius}</span>
+      <Radio
+        checked={scale === Scale.Celsius}
+        onChange={onChange}
+        color="primary"
+        value={Scale.Celsius}
+      />
+      <Radio
+        checked={scale === Scale.Fahrenheit}
+        onChange={onChange}
+        color="secondary"
+        value={Scale.Fahrenheit}
+      />
+      <span>{Scale.Fahrenheit}</span>
+    </Card>
+  );
+};
+
+type WeatherForecastProps = {
+  date: string;
+  selected: boolean;
+  averageTemperature: number;
+  scale: Scale;
+  onClick(): void;
+};
 
 const temperatureLetter = {
   [Scale.Celsius]: 'C',
