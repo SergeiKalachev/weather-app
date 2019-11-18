@@ -1,4 +1,11 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Mobile view
+![image](https://i.ibb.co/9Tt1BP6/w-Ma-B9-RL6-P8.jpg)
+
+## Desktop view
+![image](https://i.ibb.co/92dDJWx/Screen-Shot-2019-11-18-at-11-15-39-AM.png)
+
+## Live Preview
+https://sergeikalachev.github.io/weather-app/
 
 ## Available Scripts
 
@@ -42,6 +49,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-## Live Preview
-https://sergeikalachev.github.io/weather-app/
