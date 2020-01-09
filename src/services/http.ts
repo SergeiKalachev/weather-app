@@ -1,5 +1,4 @@
 import { toast } from 'react-toastify';
-import mockedResponse from '../mocked-response.json';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -22,10 +21,13 @@ const MAX_SUCCESS_CODE = 299;
 
 export const isError = (resp: any): resp is HttpError => resp.cod > MAX_SUCCESS_CODE;
 
-const DEV = false;
-
-export const send = <T>({ url, method }: Options): Promise<T | HttpError> => DEV
-  ? Promise.resolve(mockedResponse)
-  : fetch(url, { method })
+export const send = <T>({ url, method }: Options): Promise<T | HttpError> =>
+  fetch(url, {
+    method,
+    headers: {
+      'Accept': 'application/vnd.github.machine-man-preview+json',
+      'User-Agent': 'https://sergeikalachev.github.io/weather-app/'
+    }
+  })
   .then((response) => response.json())
   .catch((_e) => toast.error(`Http request to ${url} failed`));
